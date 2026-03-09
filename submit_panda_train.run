@@ -22,6 +22,9 @@ source /work/vita/lanfeng/vlas/DreamDojo/.venv/bin/activate
 # Set custom output directory for experiment results
 export IMAGINAIRE_OUTPUT_ROOT=/work/vita/lanfeng/vlas/exp_results
 
+# Explicitly set CUDA_HOME to the local environment to prevent transformer_engine ldconfig crash
+export CUDA_HOME=/work/vita/lanfeng/vlas/DreamDojo/.venv/lib/python3.10/site-packages/nvidia
+
 # Execute using torchrun for multinode setup
 srun torchrun \
     --nnodes=3 \
