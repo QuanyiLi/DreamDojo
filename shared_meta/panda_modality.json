@@ -1,0 +1,17 @@
+{
+  "state": {
+    "q_pos": {
+      "start": 0, "end": 9, "original_key": "observation.state",
+      "dtype": "float32", "absolute": true, "rotation_type": "axis_angle"
+    }
+  },
+  "action": {
+    "actions": {
+      "start": 0, "end": 8, "original_key": "action",
+      "dtype": "float32", "absolute": true, "rotation_type": "axis_angle"
+    }
+  },
+  "video": {
+    "image_1": {"original_key": "observation.images.image_1"}
+  }
+}

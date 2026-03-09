@@ -152,10 +152,35 @@ def construct_modality_config_and_transforms(num_frames, embodiment, agibot_pad_
                 ],
             ),
         }
+    elif embodiment == "panda":
+        timestep_interval = 2
+        delta_indices = list(range(0, num_frames * timestep_interval, timestep_interval))
+        video_key = "video.image_1"
+        config = {
+            "video": ModalityConfig(
+                delta_indices=delta_indices,
+                modality_keys=[video_key],
+            ),
+            "state": ModalityConfig(
+                delta_indices=[0],
+                modality_keys=[
+                    "state.q_pos",
+                ],
+            ),
+            "action": ModalityConfig(
+                delta_indices=delta_indices,
+                modality_keys=[
+                    "action.actions",
+                ],
+            ),
+        }
     
     video_modality, state_modality, action_modality = config["video"], config["state"], config["action"]
     height = 480
     width = 640
+    if embodiment == "panda":
+        height = 224
+        width = 448
     
     train_transform = ComposedModalityTransform(
         transforms=[

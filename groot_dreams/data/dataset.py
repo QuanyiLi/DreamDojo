@@ -262,6 +262,9 @@ class LeRobotSingleDataset(Dataset):
             elif embodiment_tag == EmbodimentTag.YAM:
                 modality_meta_path = Path("shared_meta/YAM_modality.json")
                 print("WARNING: Could not find modality.json in dataset path, falling back to shared_meta/YAM_modality.json")
+            elif embodiment_tag == EmbodimentTag.PANDA:
+                modality_meta_path = Path("shared_meta/panda_modality.json")
+                print("WARNING: Could not find modality.json in dataset path, falling back to shared_meta/panda_modality.json")
             else:
                 raise ValueError(f"Embodiment tag {embodiment_tag} not supported")
         assert (
@@ -342,6 +345,9 @@ class LeRobotSingleDataset(Dataset):
         elif embodiment_tag == EmbodimentTag.YAM:
             default_stats_path = Path("shared_meta/YAM_stats.json")
             default_modality_meta_path = Path("shared_meta/YAM_modality.json")
+        elif embodiment_tag == EmbodimentTag.PANDA:
+            default_stats_path = Path("shared_meta/panda_stats.json")
+            default_modality_meta_path = Path("shared_meta/panda_modality.json")
         else:
             raise ValueError(f"Embodiment tag {embodiment_tag} not supported")
         if has_default_meta:
@@ -479,6 +485,9 @@ class LeRobotSingleDataset(Dataset):
             elif self.tag == "yam":
                 modality_meta_path = Path("shared_meta/YAM_modality.json")
                 print("WARNING: Could not find modality.json in dataset path, falling back to shared_meta/YAM_modality.json")
+            elif self.tag == "panda":
+                modality_meta_path = Path("shared_meta/panda_modality.json")
+                print("WARNING: Could not find modality.json in dataset path, falling back to shared_meta/panda_modality.json")
             else:
                 raise ValueError(f"Embodiment tag {self.tag} not supported")
         assert (
