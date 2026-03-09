@@ -19,6 +19,9 @@ TRAIN_PATHS=$(python3 -c "import glob; paths = glob.glob('/work/vita/lanfeng/vla
 # Activate the venv exactly as requested
 source /work/vita/lanfeng/vlas/DreamDojo/.venv/bin/activate
 
+# Set custom output directory for experiment results
+export IMAGINAIRE_OUTPUT_ROOT=/work/vita/lanfeng/vlas/exp_results
+
 # Execute using torchrun for multinode setup
 srun torchrun \
     --nnodes=3 \
