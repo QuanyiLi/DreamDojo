@@ -24,6 +24,11 @@ export IMAGINAIRE_OUTPUT_ROOT=/work/vita/lanfeng/vlas/exp_results
 
 # Explicitly set CUDA_HOME to the local environment to prevent transformer_engine ldconfig crash
 export CUDA_HOME=/work/vita/lanfeng/vlas/DreamDojo/.venv/lib/python3.10/site-packages/nvidia
+export CUDA_RUNTIME_DIR=$CUDA_HOME/cuda_runtime/lib
+if [ ! -f "$CUDA_RUNTIME_DIR/libcudart.so" ]; then
+    ln -sf $CUDA_RUNTIME_DIR/libcudart.so.12 $CUDA_RUNTIME_DIR/libcudart.so
+fi
+export LD_LIBRARY_PATH=$CUDA_RUNTIME_DIR:$LD_LIBRARY_PATH
 
 # Execute using torchrun for multinode setup
 srun torchrun \
