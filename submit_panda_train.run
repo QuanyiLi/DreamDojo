@@ -1,0 +1,32 @@
+#!/bin/bash
+#SBATCH --job-name=vlas
+#SBATCH --output=/home/lfeng/task_logs/%j.log
+#SBATCH --partition=h100
+#SBATCH --qos=vita
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=64
+#SBATCH --gpus-per-node=4
+#SBATCH --nodes=3
+#SBATCH --time=24:00:00
+#SBATCH --mem=200G
+
+export MASTER_ADDR=$(scontrol show hostnames $SLURM_JOB_NODELIST | head -n 1)
+export MASTER_PORT=29500
+
+# Extract all lerobot_data paths from the subdirectories carrying `train` in their names
+TRAIN_PATHS=$(python3 -c "import glob; paths = glob.glob('/work/vita/lanfeng/vlas/wise_dataset_0.3.2/*/*_train/lerobot_data'); print(','.join(paths))")
+
+# Activate the venv exactly as requested
+source /work/vita/lanfeng/vlas/DreamDojo/.venv/bin/activate
+
+# Execute using torchrun for multinode setup
+srun torchrun \
+    --nnodes=3 \
+    --nproc_per_node=4 \
+    --rdzv_id=$SLURM_JOB_ID \
+    --rdzv_backend=c10d \
+    --rdzv_endpoint=$MASTER_ADDR:$MASTER_PORT \
+    -m scripts.train \
+    --config=cosmos_predict2/_src/predict2/action/configs/action_conditioned/config.py \
+    experiment=2b_480_640_panda \
+    dataloader_train.dataset.dataset_path="$TRAIN_PATHS"
