@@ -249,7 +249,7 @@ def main():
     parser.add_argument("--output_dir", default=None, help="Output directory")
     parser.add_argument("--num_samples", type=int, default=20, help="Number of test samples")
     parser.add_argument("--num_steps", type=int, default=35, help="Diffusion steps per AR step")
-    parser.add_argument("--guidance", type=float, default=0, help="Guidance scale")
+    parser.add_argument("--guidance", type=float, default=5.0, help="Guidance scale for action CFG")
     parser.add_argument("--ckpt_path", default=None, help="Override checkpoint path")
     parser.add_argument(
         "opts", default=None, nargs=argparse.REMAINDER,
