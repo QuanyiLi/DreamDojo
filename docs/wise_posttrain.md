@@ -48,9 +48,9 @@ Actions go through the following pipeline:
 4. **Injection into transformer** (`action_conditioned_minimal_v1_lvg_dit.py:308-311`):
    Action embeddings are **added** to timestep embeddings (both `t_embedding` and `adaln_lora`), then flow through all DiT blocks via adaptive layer norm.
 
-### Key Design Choices (inherited from official Cosmos)
+### Key Design Choices
 
-- **No action dropout** (`conditioner.py:275`): `dropout_rate=0.0` for action. This means CFG (classifier-free guidance) cannot amplify the action signal — the unconditional path still sees full actions.
+- **Action dropout for CFG** (`conditioner.py:274`): `dropout_rate=0.2` for action. During training, 20% of the time the action tensor is zeroed out. This enables CFG to amplify action following at inference: the unconditional path sees zero actions, so `guidance > 0` strengthens action adherence. (Note: the official Cosmos code used `dropout_rate=0.0` which prevented CFG from amplifying actions; this was fixed.)
 - **Additive injection**: Actions are added to timestep embeddings rather than using cross-attention or concatenation.
 - **384-dim multi-embodiment vector**: Designed for joint training across robots. For WISE-only training, only 8/384 dims carry signal.
 
@@ -205,7 +205,6 @@ Changes made to support WISE post-training (vs initial commit `2d56fd0`):
 ### Unchanged (Official Design)
 
 The following are inherited from the official NVIDIA Cosmos codebase and were **not modified**:
-- Action `dropout_rate=0.0` (no CFG amplification for actions)
 - 384-dim multi-embodiment sparse action vector
 - Cumulative delta action computation within 4-frame chunks
 - Additive action injection into timestep embeddings
@@ -213,8 +212,6 @@ The following are inherited from the official NVIDIA Cosmos codebase and were **
 
 ## Known Limitations
 
-1. **Action CFG not supported**: Since `action dropout_rate=0.0`, the unconditional path in CFG still sees full actions. Setting `guidance > 0` only amplifies text/video conditioning, not action adherence.
-
-2. **Sparse action input**: Only 8/384 dims carry WISE action signal. The MLP processes 1536 input dims (384×4) but only 32 (8×4) are non-zero/non-constant. This may dilute the action signal.
+1. **Sparse action input**: Only 8/384 dims carry WISE action signal. The MLP processes 1536 input dims (384×4) but only 32 (8×4) are non-zero/non-constant. This may dilute the action signal.
 
 3. **Autoregressive drift**: Over multiple AR steps, prediction errors accumulate. The conditioning frame quality degrades because it comes from the previous step's output rather than GT.

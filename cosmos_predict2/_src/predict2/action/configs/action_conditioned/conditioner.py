@@ -229,8 +229,7 @@ class ActionConditionedConditioner(Video2WorldConditioner):
         override_dropout_rate: Optional[Dict[str, float]] = None,
     ) -> ActionConditionedCondition:
         output = super()._forward(batch, override_dropout_rate)
-        assert "action" in batch, "ActionConditionalConditioner requires 'action' in batch"
-        output["action"] = batch["action"]
+        assert "action" in output, "ActionConditionedConditioner requires 'action' embedder to produce output"
         return ActionConditionedCondition(**output)
 
 
@@ -272,7 +271,7 @@ ActionConditionedConditionerConfig: LazyDict = L(ActionConditionedConditioner)(
     action=L(ReMapkey)(
         input_key="action",
         output_key="action",
-        dropout_rate=0.0,
+        dropout_rate=0.2,
         dtype=None,
     ),
 )
