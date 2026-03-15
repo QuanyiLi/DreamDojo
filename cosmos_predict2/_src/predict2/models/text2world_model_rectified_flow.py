@@ -865,7 +865,7 @@ class Text2WorldModelRectifiedFlow(ImaginaireModel):
         with torch.no_grad():
             outputs = self.lam.lam(lam_input)
         latent_action = outputs["z_rep"].squeeze().to(data_batch["action"].dtype).detach()
-        latent_action = rearrange(latent_action, "(t b) d -> b t d", t=data_batch["action"].shape[1])
+        latent_action = rearrange(latent_action, "(b t) d -> b t d", b=data_batch["action"].shape[0])
         data_batch["action"][:, :, -32:] = data_batch["action"][:, :, -32:] * latent_action
 
         # Get the input data to noise and denoise~(image, video) and the corresponding conditioner.

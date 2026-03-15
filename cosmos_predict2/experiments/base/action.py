@@ -290,6 +290,32 @@ _default_groot_config_14b = LazyDict(
     flags={"allow_objects": True},
 )
 
+_default_wise_config = LazyDict(
+    dict(
+        defaults=[
+            DEFAULT_CHECKPOINT.experiment,
+            {"override /model": "action_conditioned_video2world_fsdp_rectified_flow"},
+            {"override /net": "cosmos_v1_2B_action_chunk_conditioned"},
+            {"override /conditioner": "action_conditioned_video_conditioner"},
+            {"override /data_train": "wise_13frame_480_640_train"},
+            {"override /data_val": "wise_13frame_480_640_val"},
+            "_self_",
+        ],
+        job=dict(
+            project="cosmos_predict2_action_conditioned",
+            group="cosmos_predict_v2p5",
+            name="2b_wise_action_conditioned",
+        ),
+        optimizer=_default_groot_config["optimizer"],
+        checkpoint=_default_groot_config["checkpoint"],
+        trainer=_default_groot_config["trainer"],
+        model_parallel=_default_groot_config["model_parallel"],
+        model=_default_groot_config["model"],
+        dataloader_train=_default_groot_config["dataloader_train"],
+    ),
+    flags={"allow_objects": True},
+)
+
 # Automatically load all config files from the configs directory
 _configs_dir = Path(__file__).parent.parent.parent.parent / "configs"
 _experiment_configs = {}
@@ -305,6 +331,8 @@ for yaml_file in sorted(_configs_dir.glob("*.yaml")):
     # Load the config and store in both dict and globals for backward compatibility
     if "14b" in experiment_name:
         config = load_experiment_config(experiment_name, _default_groot_config_14b)
+    elif "wise" in experiment_name:
+        config = load_experiment_config(experiment_name, _default_wise_config)
     else:
         config = load_experiment_config(experiment_name, _default_groot_config)
     _experiment_configs[var_name] = config

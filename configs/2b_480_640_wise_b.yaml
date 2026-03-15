@@ -1,0 +1,96 @@
+job:
+  project: dreamdojo
+  group: wise_hpsearch
+  name: wise_lr1e4_3k
+checkpoint:
+  save_iter: 500
+trainer:
+  max_iter: 3000
+  grad_accum_iter: 1
+  callbacks:
+    every_n_sample_reg:
+      every_n: 500
+      fps: 5
+    every_n_sample_ema:
+      every_n: 500
+      fps: 5
+optimizer:
+  lr: 1.0e-4
+  weight_decay: 0.1
+scheduler:
+  warm_up_steps:
+  - 50
+  cycle_lengths:
+  - 3000
+  f_start:
+  - 1.0e-6
+  f_max:
+  - 1.0
+  f_min:
+  - 0.1
+model_parallel:
+  context_parallel_size: 1
+model:
+  config:
+    state_t: 4
+    net:
+      action_dim: 384
+      temporal_compression_ratio: 4
+      num_action_per_chunk: 12
+      zero_init_action_embedder: false
+dataloader_train:
+  batch_size: 4
+  dataset:
+    num_frames: 13
+    dataset_path:
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_0_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_10_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_11_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_12_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_13_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_14_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_15_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_16_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_17_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_18_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_19_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_1_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_20_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_21_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_22_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_23_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_2_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_3_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_4_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_5_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_6_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_7_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_8_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_9_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_0_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_10_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_11_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_12_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_13_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_14_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_15_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_16_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_17_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_18_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_19_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_1_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_20_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_21_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_22_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_23_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_2_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_3_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_4_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_5_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_6_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_7_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_8_train/lerobot_data
+    - datasets/wise_dataset_0.3.2/noise_demo_5_round/config_9_train/lerobot_data
+    data_split: train
+    single_base_index: false
+    deterministic_uniform_sampling: false

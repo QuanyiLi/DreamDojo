@@ -97,6 +97,21 @@ dreamdojo_13frame_480_640_val_dataset = L(MultiVideoActionDataset)(
     dataset_path=["datasets/PhysicalAI-Robotics-GR00T-Teleop-GR1/GR1_robot"],
 )
 
+# WISE dataset paths
+_wise_dataset_paths = []
+for _subset in ["no_noise_demo_1_round", "noise_demo_5_round"]:
+    for _i in range(24):
+        _wise_dataset_paths.append(f"datasets/wise_dataset_0.3.2/{_subset}/config_{_i}_train/lerobot_data")
+
+wise_13frame_480_640_train_dataset = L(MultiVideoActionDataset)(
+    num_frames=13,
+    dataset_path=_wise_dataset_paths,
+)
+wise_13frame_480_640_val_dataset = L(MultiVideoActionDataset)(
+    num_frames=13,
+    dataset_path=_wise_dataset_paths,
+)
+
 
 # create dataloader for each dataset
 def get_sampler(dataset):
@@ -182,6 +197,17 @@ dreamdojo_13frame_480_640_val_dataloader = L(get_dataloader_with_sampler)(
     drop_last=True,
 )
 
+wise_13frame_480_640_train_dataloader = L(get_dataloader_with_sampler)(
+    dataset=wise_13frame_480_640_train_dataset,
+    batch_size=1,
+    drop_last=True,
+)
+wise_13frame_480_640_val_dataloader = L(get_dataloader_with_sampler)(
+    dataset=wise_13frame_480_640_val_dataset,
+    batch_size=1,
+    drop_last=True,
+)
+
 
 def register_training_and_val_data():
     cs = ConfigStore.instance()
@@ -239,4 +265,17 @@ def register_training_and_val_data():
         package="dataloader_val",
         name="dreamdojo_13frame_480_640_val",
         node=dreamdojo_13frame_480_640_val_dataloader,
+    )
+
+    cs.store(
+        group="data_train",
+        package="dataloader_train",
+        name="wise_13frame_480_640_train",
+        node=wise_13frame_480_640_train_dataloader,
+    )
+    cs.store(
+        group="data_val",
+        package="dataloader_val",
+        name="wise_13frame_480_640_val",
+        node=wise_13frame_480_640_val_dataloader,
     )

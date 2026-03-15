@@ -1,0 +1,61 @@
+job:
+  project: dreamdojo
+  group: wise_eval
+  name: wise_lr1e4_3k_eval
+checkpoint:
+  save_iter: 999999
+  load_path: /mnt/vita/scratch/vita-students/users/lfeng/dreamdojo_logs/dreamdojo/wise_hpsearch/wise_lr1e4_3k/checkpoints/iter_000003000/
+  load_training_state: false
+trainer:
+  max_iter: 1
+  grad_accum_iter: 1
+  callbacks:
+    every_n_sample_reg:
+      every_n: 1
+      fps: 5
+    every_n_sample_ema:
+      every_n: 1
+      fps: 5
+model_parallel:
+  context_parallel_size: 1
+model:
+  config:
+    fsdp_shard_size: 1
+    state_t: 4
+    net:
+      action_dim: 384
+      temporal_compression_ratio: 4
+      num_action_per_chunk: 12
+      zero_init_action_embedder: false
+dataloader_train:
+  batch_size: 4
+  dataset:
+    num_frames: 13
+    dataset_path:
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_0_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_10_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_11_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_12_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_13_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_14_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_15_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_16_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_17_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_18_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_19_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_1_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_20_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_21_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_22_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_23_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_2_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_3_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_4_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_5_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_6_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_7_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_8_test/lerobot_data
+    - datasets/wise_dataset_0.3.2/no_noise_demo_1_round/config_9_test/lerobot_data
+    data_split: full
+    single_base_index: false
+    deterministic_uniform_sampling: false

@@ -20,13 +20,13 @@ export LD_PRELOAD=""  # Clear any preloaded libraries
 
 echo "Running on $NNODES nodes with $NPROC processes per node. This node rank is $NODE_RANK."
 
-export PYTHONPATH=/mnt/amlfs-01/shared/shenyuang/DreamDojo:$PYTHONPATH
+export PYTHONPATH=/mnt/vita/scratch/vita-students/users/lfeng/DreamDojo:$PYTHONPATH
 export OMP_NUM_THREADS=8
-export HF_HOME=/mnt/amlfs-01/shared/shenyuang/cosmos_cache
-export IMAGINAIRE_OUTPUT_ROOT=/mnt/amlfs-01/shared/shenyuang/dreamdojo_logs
+export HF_HOME=/mnt/vita/scratch/vita-students/users/lfeng/.cache/huggingface
+export IMAGINAIRE_OUTPUT_ROOT=/mnt/vita/scratch/vita-students/users/lfeng/dreamdojo_logs
 # export WANDB_API_KEY=  # Set your key before removing job.wandb_mode=disabled
 
-source /mnt/amlfs-01/shared/shenyuang/DreamDojo/.venv/bin/activate
+source /mnt/vita/scratch/vita-students/users/lfeng/DreamDojo/.venv/bin/activate
 
 config_name=$1
 

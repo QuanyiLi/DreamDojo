@@ -1059,15 +1059,11 @@ class WrappedLeRobotSingleDataset(LeRobotSingleDataset):
             delta_actions = torch.cat(delta_actions, dim=0).float()
 
             action_seq = torch.zeros(self.num_frames - 1, 384, dtype=torch.float32)
-            # gt_actions = torch.zeros(self.num_frames - 1, 352, dtype=torch.float32)
-            # latent_actions = torch.ones(self.num_frames - 1, 32, dtype=torch.float32)
-            # latent_actions = latent_actions * torch.bernoulli(0.8 * torch.ones(1)).type_as(latent_actions)
-            # action_seq = torch.cat([gt_actions, latent_actions], dim=-1)
+            # Initialize last 32 dims to 1 so LAM latent actions are preserved
+            # (forward pass does action[:, :, -32:] *= latent_action)
+            action_seq[:, -32:] = 1.0
             if "inhouse_human" in str(self.dataset_path).lower():
-                gt_actions = torch.zeros(self.num_frames - 1, 352, dtype=torch.float32)
-                latent_actions = torch.ones(self.num_frames - 1, 32, dtype=torch.float32)
-                action_seq = torch.cat([gt_actions, latent_actions], dim=-1)
-                # action_seq[:, 29:58] = delta_actions
+                pass  # no delta_actions for inhouse_human
             elif "gr1" in str(self.dataset_path).lower():
                 action_seq[:, :29] = delta_actions
             elif "g1" in str(self.dataset_path).lower():
@@ -1076,8 +1072,10 @@ class WrappedLeRobotSingleDataset(LeRobotSingleDataset):
                 action_seq[:, 101:147] = delta_actions
             elif "agibot" in str(self.dataset_path).lower():
                 action_seq[:, 147:169] = delta_actions
+            elif "config_" in str(self.dataset_path).lower():
+                action_seq[:, 169:169 + delta_actions.shape[-1]] = delta_actions
 
-            key = action_seq[0:1, :29]
+            key = action_seq[0:1, :29].clone()
             key[:, :min(original_outputs["state"].shape[1], 29)] = original_outputs["state"][:, :29]
 
             data = {
